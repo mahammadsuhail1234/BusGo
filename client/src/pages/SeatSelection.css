@@ -1,0 +1,414 @@
+
+.seat-page {
+  min-height: 100vh;
+  background: #f5f7f6;
+  color: #18352c;
+  font-family: Arial, sans-serif;
+}
+
+.seat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 6%;
+  background: #fff;
+  border-bottom: 1px solid #e1e9e4;
+}
+
+.seat-logo {
+  color: #18352c;
+  font-size: 26px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.seat-logo span {
+  color: #27845c;
+}
+
+.seat-back-link {
+  color: #286a4c;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.seat-content {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+  padding: 32px 0 50px;
+}
+
+.seat-heading {
+  margin-bottom: 22px;
+}
+
+.seat-eyebrow,
+.route-label {
+  color: #668477;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+}
+
+.seat-heading h1 {
+  margin: 8px 0;
+  font-size: clamp(26px, 4vw, 36px);
+}
+
+.seat-heading > p:last-child {
+  color: #718078;
+  font-size: 14px;
+}
+
+.selected-bus-card,
+.seat-panel,
+.seat-summary {
+  background: #fff;
+  border: 1px solid #e0e9e3;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(24, 53, 44, 0.04);
+}
+
+.selected-bus-card {
+  padding: 22px;
+  margin-bottom: 22px;
+}
+
+.bus-card-top,
+.bus-price-row,
+.seat-panel-heading,
+.summary-line,
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.bus-card-top h2,
+.seat-panel h2,
+.seat-summary h2 {
+  margin: 0;
+  font-size: 19px;
+}
+
+.bus-operator,
+.bus-date {
+  color: #718078;
+  font-size: 13px;
+}
+
+.bus-type {
+  padding: 7px 10px;
+  background: #edf5ef;
+  color: #286a4c;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.bus-route {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 0;
+}
+
+.bus-route > div,
+.route-destination {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bus-route strong {
+  font-size: 18px;
+}
+
+.route-time {
+  color: #718078;
+  font-size: 13px;
+}
+
+.route-arrow {
+  color: #27845c;
+  font-size: 23px;
+}
+
+.route-destination {
+  text-align: right;
+}
+
+.bus-price-row {
+  border-top: 1px solid #e9efeb;
+  padding-top: 16px;
+  color: #718078;
+  font-size: 14px;
+}
+
+.bus-price-row strong {
+  color: #18352c;
+  font-size: 23px;
+}
+
+.seat-main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.8fr);
+  align-items: start;
+  gap: 22px;
+}
+
+.seat-panel,
+.seat-summary {
+  padding: 22px;
+}
+
+.seat-panel-heading p {
+  color: #718078;
+  font-size: 13px;
+  margin-bottom: 0;
+}
+
+.seat-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 24px 0;
+  color: #66776e;
+  font-size: 12px;
+}
+
+.seat-legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-box {
+  width: 14px;
+  height: 14px;
+  border: 1px solid #a9c8b5;
+  border-radius: 4px;
+}
+
+.available-box {
+  background: #fff;
+}
+
+.selected-box {
+  background: #287451;
+  border-color: #287451;
+}
+
+.booked-box {
+  background: #dfe5e0;
+  border-color: #dfe5e0;
+}
+
+.seat-bus {
+  max-width: 330px;
+  margin: 0 auto;
+  padding: 16px;
+  background: #f7f8f5;
+  border: 1px solid #e8eee8;
+  border-radius: 16px;
+}
+
+.driver-area {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #dce6de;
+  color: #75847b;
+  font-size: 11px;
+}
+
+.seat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.seat {
+  min-height: 42px;
+  border: 1px solid #b9d2c1;
+  border-radius: 8px;
+  background: #fff;
+  color: #286a4c;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.15s;
+}
+
+.seat:not(:disabled):hover {
+  transform: translateY(-2px);
+  border-color: #287451;
+}
+
+.seat.selected {
+  background: #287451;
+  color: #fff;
+  border-color: #287451;
+}
+
+.seat.booked,
+.seat:disabled {
+  background: #dfe5e0;
+  border-color: #dfe5e0;
+  color: #89938c;
+  cursor: not-allowed;
+}
+
+.seat-note {
+  margin: 18px 0 0;
+  color: #7b877f;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.seat-summary h2 {
+  margin-bottom: 18px;
+}
+
+.summary-route {
+  padding: 12px;
+  margin-bottom: 16px;
+  background: #f1f6f2;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.summary-line {
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid #edf1ee;
+  font-size: 13px;
+}
+
+.summary-line span {
+  color: #718078;
+}
+
+.summary-line strong {
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.summary-total {
+  padding: 20px 0;
+  font-weight: 700;
+}
+
+.summary-total strong {
+  color: #287451;
+  font-size: 25px;
+}
+
+.seat-primary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 18px;
+  border: none;
+  border-radius: 9px;
+  background: #287451;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.seat-primary-btn:hover:not(:disabled) {
+  background: #1e6041;
+}
+
+.seat-primary-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.summary-note {
+  color: #7b877f;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.seat-empty {
+  max-width: 500px;
+  margin: 60px auto;
+  padding: 24px;
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .seat-header {
+    padding: 16px 5%;
+  }
+
+  .seat-content {
+    width: 92%;
+    padding-top: 24px;
+  }
+
+  .selected-bus-card,
+  .seat-panel,
+  .seat-summary {
+    padding: 17px;
+  }
+
+  .seat-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bus-route {
+    gap: 10px;
+  }
+
+  .bus-route strong {
+    font-size: 15px;
+    overflow-wrap: anywhere;
+  }
+
+  .seat-grid {
+    gap: 8px;
+  }
+
+  .seat {
+    min-height: 40px;
+  }
+
+  .seat-summary {
+    order: 2;
+  }
+}
+
+@media (max-width: 380px) {
+  .seat-logo {
+    font-size: 22px;
+  }
+
+  .seat-back-link {
+    font-size: 12px;
+  }
+
+  .seat-legend {
+    gap: 9px;
+    font-size: 11px;
+  }
+
+  .seat-grid {
+    gap: 6px;
+  }
+
+  .seat {
+    min-height: 36px;
+    font-size: 12px;
+  }
+}

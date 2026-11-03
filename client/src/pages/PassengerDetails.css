@@ -1,0 +1,167 @@
+
+.passenger-page {
+  min-height: 100vh;
+  background: #f5f7f6;
+  color: #18352c;
+  font-family: Arial, sans-serif;
+}
+
+.passenger-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 6%;
+  background: #fff;
+  border-bottom: 1px solid #e1e9e4;
+}
+
+.passenger-logo {
+  font-size: 25px;
+  font-weight: 800;
+  color: #18352c;
+  text-decoration: none;
+}
+
+.passenger-logo span {
+  color: #27845c;
+}
+
+.passenger-back {
+  color: #286a4c;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.passenger-content {
+  width: min(700px, 92%);
+  margin: 0 auto;
+  padding: 32px 0 50px;
+}
+
+.passenger-content > h1 {
+  margin-bottom: 8px;
+}
+
+.passenger-subtitle {
+  color: #718078;
+  margin-bottom: 24px;
+}
+
+.passenger-trip-card,
+.passenger-form {
+  background: #fff;
+  border: 1px solid #e0e9e3;
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+
+.passenger-trip-card h2 {
+  margin-top: 0;
+}
+
+.passenger-trip-card p {
+  color: #63776c;
+  font-size: 14px;
+}
+
+.passenger-trip-card h3 {
+  color: #287451;
+}
+
+.passenger-form h2 {
+  margin: 4px 0 18px;
+  font-size: 19px;
+}
+
+.passenger-form label {
+  display: block;
+  margin: 14px 0 7px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.passenger-form input,
+.passenger-form select {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: 11px 12px;
+  border: 1px solid #cedbd1;
+  border-radius: 8px;
+  background: #fff;
+  color: #18352c;
+  font: inherit;
+}
+
+.passenger-form input:focus,
+.passenger-form select:focus {
+  outline: 2px solid #9ccdb0;
+  border-color: #287451;
+}
+
+.passenger-person {
+  margin: 22px 0;
+  padding: 17px;
+  border: 1px solid #e2ebe4;
+  border-radius: 10px;
+  background: #fbfcfb;
+}
+
+.passenger-person h3 {
+  margin-top: 0;
+  font-size: 15px;
+}
+
+.passenger-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-top: 1px solid #e5ece7;
+  font-weight: 700;
+}
+
+.passenger-total strong {
+  color: #287451;
+  font-size: 24px;
+}
+
+.passenger-confirm-btn {
+  width: 100%;
+  min-height: 48px;
+  padding: 13px;
+  border: 0;
+  border-radius: 9px;
+  background: #287451;
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.passenger-confirm-btn:hover {
+  background: #1e6041;
+}
+
+.passenger-disclaimer {
+  color: #718078;
+  font-size: 12px;
+  line-height: 1.6;
+  margin-top: 14px;
+}
+
+@media (max-width: 480px) {
+  .passenger-header {
+    padding: 15px 4%;
+  }
+
+  .passenger-content {
+    padding-top: 22px;
+  }
+
+  .passenger-trip-card,
+  .passenger-form {
+    padding: 16px;
+  }
+}
