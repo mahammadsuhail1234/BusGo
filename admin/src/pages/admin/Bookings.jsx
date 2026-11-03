@@ -103,7 +103,7 @@ export default function Bookings() {
                     <td className="num">{money(b.totalPrice)}</td>
                     <td>
                       <Badge>{b.status}</Badge>
-                      {b.status !== 'Cancelled' && (
+                      {b.status === 'Pending' && (
                         <select
                           className="booking-status-select"
                           aria-label={`Update status for ${b.bookingId}`}

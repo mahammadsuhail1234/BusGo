@@ -3,7 +3,7 @@
   min-height: 100vh;
   background: #f4f7f5;
   color: #18352c;
-  font-family: Arial, sans-serif;
+  font-family: var(--busgo-sans);
 }
 
 .ticket-header {
@@ -59,6 +59,8 @@
 .ticket-success h1 {
   margin: 0 0 10px;
   font-size: clamp(24px, 4vw, 32px);
+  font-family: var(--busgo-display);
+  font-weight: 500;
 }
 
 .ticket-success p {
@@ -86,6 +88,8 @@
 
 .ticket-card-header h2 {
   margin: 0 0 6px;
+  font-family: var(--busgo-display);
+  font-weight: 500;
 }
 
 .ticket-card-header p {
@@ -137,6 +141,8 @@
 .ticket-route h3 {
   margin: 8px 0;
   font-size: 19px;
+  font-family: var(--busgo-display);
+  font-weight: 500;
 }
 
 .ticket-route p {

@@ -355,15 +355,23 @@ const updateBookingStatus = wrap(async (req, res) => {
   }
 
   const booking = await Booking.findOneAndUpdate(
-    { _id: req.params.id, status: { $in: ["Pending", "Confirmed"] } },
+    {
+      _id: req.params.id,
+      status: status === "Confirmed" ? { $in: ["Pending", "Confirmed"] } : "Pending",
+    },
     { status },
     { new: true, runValidators: true }
   );
 
   if (!booking) {
-    const exists = await Booking.exists({ _id: req.params.id });
-    return res.status(exists ? 409 : 404).json({
-      message: exists ? "Cancelled bookings cannot be reactivated." : "Booking not found.",
+    const existingBooking = await Booking.findById(req.params.id, "status");
+    const message = !existingBooking
+      ? "Booking not found."
+      : existingBooking.status === "Cancelled"
+        ? "Cancelled bookings cannot be reactivated."
+        : "Confirmed bookings cannot be changed back to pending.";
+    return res.status(existingBooking ? 409 : 404).json({
+      message,
     });
   }
 

@@ -5,12 +5,15 @@
   --busgo-coral: #f27b55;
   --busgo-paper: #f7f8f4;
   --busgo-line: #dce5df;
+  --busgo-sans: "Manrope", sans-serif;
+  --busgo-display: "Playfair Display", Georgia, serif;
+  --busgo-journey-image: url("https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=2200&q=85");
 }
 
 body {
   color: var(--busgo-ink);
   background: var(--busgo-paper);
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--busgo-sans);
 }
 
 .app {
@@ -45,7 +48,7 @@ body {
   border-radius: 7px;
   background: var(--busgo-forest);
   color: #fff;
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--busgo-sans);
   font-size: 15px;
   font-weight: 800;
 }
@@ -89,7 +92,7 @@ body {
   background-color: #123b34;
   background-image:
     linear-gradient(90deg, rgba(13, 48, 42, 0.96) 0%, rgba(13, 48, 42, 0.88) 45%, rgba(13, 48, 42, 0.45) 100%),
-    url("https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=2200&q=85");
+    var(--busgo-journey-image);
   background-position: center, center 54%;
   background-size: cover;
 }
@@ -117,7 +120,7 @@ body {
 .hero h1 {
   margin: 20px 0 17px;
   color: #fffdf6;
-  font-family: "DM Serif Display", Georgia, serif;
+  font-family: var(--busgo-display);
   font-size: 62px;
   font-weight: 400;
   letter-spacing: 0;
@@ -188,7 +191,7 @@ body {
 .search-heading h2 {
   margin: 0;
   color: var(--busgo-ink);
-  font-family: "DM Serif Display", Georgia, serif;
+  font-family: var(--busgo-display);
   font-size: 27px;
   font-weight: 400;
   letter-spacing: 0;
@@ -280,14 +283,14 @@ body {
 .results-heading h2 {
   margin: 0;
   color: var(--busgo-ink);
-  font-family: "DM Serif Display", Georgia, serif;
+  font-family: var(--busgo-display);
   font-size: 31px;
   font-weight: 400;
 }
 
 .results-heading h2 span {
   color: #819087;
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--busgo-sans);
   font-size: 15px;
   font-weight: 600;
 }
@@ -503,7 +506,7 @@ body {
 .section-heading h2 {
   margin: 8px 0 0;
   color: var(--busgo-ink);
-  font-family: "DM Serif Display", Georgia, serif;
+  font-family: var(--busgo-display);
   font-size: 34px;
   font-weight: 400;
   letter-spacing: 0;
@@ -570,14 +573,14 @@ footer p {
 .ticket-page {
   color: var(--busgo-ink);
   background: var(--busgo-paper);
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--busgo-sans);
 }
 
 .auth-page {
   min-height: 100vh;
   background:
     linear-gradient(125deg, rgba(16, 60, 53, 0.94), rgba(16, 60, 53, 0.78)),
-    url("https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=1800&q=80") center / cover;
+    var(--busgo-journey-image) center / cover;
 }
 
 .auth-card {
@@ -591,7 +594,7 @@ footer p {
 }
 
 .auth-card h1 {
-  font-family: "DM Serif Display", Georgia, serif;
+  font-family: var(--busgo-display);
   font-size: 32px;
   font-weight: 400;
   letter-spacing: 0;
@@ -611,7 +614,13 @@ footer p {
 }
 
 .dashboard-page {
-  background: var(--busgo-paper);
+  background-color: var(--busgo-paper);
+  background-image:
+    linear-gradient(rgba(247, 248, 244, 0.94), rgba(247, 248, 244, 0.97)),
+    var(--busgo-journey-image);
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 .dashboard-navbar {
@@ -620,7 +629,10 @@ footer p {
 }
 
 .dashboard-content h1,
-.dashboard-card h2 {
+.dashboard-card h2,
+.my-bookings-heading h2 {
+  font-family: var(--busgo-display);
+  font-weight: 500;
   letter-spacing: 0;
 }
 
@@ -636,6 +648,18 @@ footer p {
 .dashboard-card {
   border-radius: 7px;
   box-shadow: none;
+}
+
+.seat-page,
+.passenger-page,
+.ticket-page {
+  background-color: var(--busgo-paper);
+  background-image:
+    linear-gradient(rgba(247, 248, 244, 0.93), rgba(247, 248, 244, 0.97)),
+    var(--busgo-journey-image);
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 .seat-primary-btn {

@@ -3,7 +3,7 @@
   min-height: 100vh;
   background: #f5f7f6;
   color: #18352c;
-  font-family: Arial, sans-serif;
+  font-family: var(--busgo-sans);
 }
 
 .seat-header {
@@ -53,6 +53,8 @@
 .seat-heading h1 {
   margin: 8px 0;
   font-size: clamp(26px, 4vw, 36px);
+  font-family: var(--busgo-display);
+  font-weight: 500;
 }
 
 .seat-heading > p:last-child {
@@ -90,6 +92,8 @@
 .seat-summary h2 {
   margin: 0;
   font-size: 19px;
+  font-family: var(--busgo-display);
+  font-weight: 500;
 }
 
 .bus-operator,
