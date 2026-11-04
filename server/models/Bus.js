@@ -1,6 +1,17 @@
 
 const mongoose = require("mongoose");
 
+const liveLocationSchema = new mongoose.Schema(
+  {
+    latitude: { type: Number, min: -90, max: 90 },
+    longitude: { type: Number, min: -180, max: 180 },
+    accuracy: { type: Number, min: 0 },
+    updatedAt: { type: Date },
+    sharing: { type: Boolean, default: true },
+  },
+  { _id: false }
+);
+
 const busSchema = new mongoose.Schema(
   {
     busName: {
@@ -90,6 +101,7 @@ const busSchema = new mongoose.Schema(
       enum: ["Scheduled", "Boarding", "Departed", "Delayed", "Arrived", "Cancelled"],
       default: "Scheduled",
     },
+    liveLocation: { type: liveLocationSchema, default: undefined, select: false },
   },
   {
     timestamps: true,

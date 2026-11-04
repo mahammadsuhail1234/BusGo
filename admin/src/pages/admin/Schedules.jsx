@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { api } from '../../api'
 import { useLoad } from '../../hooks'
 import { useToast } from '../../components/Toast'
@@ -15,12 +15,17 @@ export default function Schedules() {
     () => api('/admin/schedules', { params: { date, status, routeId, ...(!date && { from: todayISO() }) } }),
     [date, status, routeId]
   )
+  useEffect(() => {
+    const interval = setInterval(reload, 15000)
+    return () => clearInterval(interval)
+  }, [reload])
   const buses = useLoad(() => api('/admin/buses'))
   const routes = useLoad(() => api('/admin/routes'))
 
   const [create, setCreate] = useState(null)
   const [edit, setEdit] = useState(null)
   const [busy, setBusy] = useState(false)
+  const [updatingStatus, setUpdatingStatus] = useState('')
   const [formError, setFormError] = useState('')
 
   const schedules = data?.schedules || []
@@ -81,6 +86,20 @@ export default function Schedules() {
     }
   }
 
+  async function updateTripStatus(s, tripStatus) {
+    if (tripStatus === s.tripStatus) return
+    setUpdatingStatus(s._id)
+    try {
+      const res = await api(`/admin/schedules/${s._id}/status`, { method: 'PATCH', body: { tripStatus } })
+      toast(res.message)
+      reload()
+    } catch (err) {
+      toast(err.message, 'error')
+    } finally {
+      setUpdatingStatus('')
+    }
+  }
+
   async function remove(s) {
     if (!confirm('Delete this schedule?')) return
     try {
@@ -121,7 +140,7 @@ export default function Schedules() {
           <div className="table-wrap">
             <table>
               <thead>
-                <tr><th>Date</th><th>Route</th><th>Bus</th><th>Time</th><th className="num">Fare</th><th className="num">Seats left</th><th>Status</th><th /></tr>
+                <tr><th>Date</th><th>Route</th><th>Bus</th><th>Time</th><th className="num">Fare</th><th className="num">Seats left</th><th>Status</th><th>Live location</th><th /></tr>
               </thead>
               <tbody>
                 {schedules.map((s) => (
@@ -132,7 +151,36 @@ export default function Schedules() {
                     <td>{s.departureTime} – {s.arrivalTime}</td>
                     <td className="num">{money(s.price)}</td>
                     <td className="num">{s.availableSeats}/{s.totalSeats}</td>
-                    <td><Badge>{s.tripStatus || 'Scheduled'}</Badge></td>
+                    <td>
+                      {s.tripStatus === 'Cancelled' ? <Badge>Cancelled</Badge> : (
+                        <select
+                          aria-label={`Bus status for ${s.busNumber}`}
+                          value={s.tripStatus || 'Scheduled'}
+                          disabled={updatingStatus === s._id}
+                          onChange={(e) => updateTripStatus(s, e.target.value)}
+                        >
+                          {['Scheduled', 'Boarding', 'Departed', 'Delayed', 'Arrived'].map((value) => (
+                            <option key={value} value={value}>{value}</option>
+                          ))}
+                        </select>
+                      )}
+                    </td>
+                    <td>
+                      {s.liveLocation?.latitude != null && s.liveLocation?.longitude != null ? (() => {
+                        const updatedAt = new Date(s.liveLocation.updatedAt)
+                        const ageMs = Date.now() - updatedAt.getTime()
+                        const isLive = s.liveLocation.sharing && Number.isFinite(ageMs) && ageMs <= 60000
+                        const mapUrl = `https://www.google.com/maps?q=${s.liveLocation.latitude},${s.liveLocation.longitude}`
+                        return (
+                          <>
+                            <a href={mapUrl} target="_blank" rel="noreferrer">Open map</a>
+                            <div><Badge>{isLive ? 'Live GPS' : s.liveLocation.sharing ? 'GPS stale' : 'Last location'}</Badge></div>
+                            <div className="sub mono">{s.liveLocation.latitude.toFixed(5)}, {s.liveLocation.longitude.toFixed(5)}</div>
+                            <div className="sub">Updated {Number.isFinite(updatedAt.getTime()) ? updatedAt.toLocaleTimeString() : 'time unavailable'}</div>
+                          </>
+                        )
+                      })() : <span className="sub">No GPS location</span>}
+                    </td>
                     <td>
                       <div className="row-actions">
                         <button className="btn small" onClick={() => { setFormError(''); setEdit({ ...s, dep: to24h(s.departureTime), arr: to24h(s.arrivalTime) }) }}>Edit</button>

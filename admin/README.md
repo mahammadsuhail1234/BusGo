@@ -35,6 +35,11 @@ create schedules (bus + route + date range), view users (and create operators/ad
 view bookings, cancel bookings (seats are released), revenue/booking reports with CSV export.
 
 **Operator:** operator login, assigned buses, schedules, passenger list per trip (CSV/print),
-update trip status (Scheduled / Boarding / Departed / Delayed / Arrived / Cancelled).
+update trip status (Scheduled / Boarding / Departed / Delayed / Arrived / Cancelled), and
+share the phone's GPS location for a trip. GPS sharing requires browser location permission
+and HTTPS (localhost is also supported); it runs while the trip page is open.
+
+Admins can see each trip's latest GPS location in **Schedules** and open it in a map. The
+schedule list refreshes automatically; locations older than one minute are marked stale.
 
 To point at a different API, copy `.env.example` to `.env` and edit `VITE_API_URL`.

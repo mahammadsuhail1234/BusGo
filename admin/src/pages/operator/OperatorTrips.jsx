@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api } from '../../api'
 import { useLoad } from '../../hooks'
@@ -13,12 +13,80 @@ export default function OperatorTrips() {
   const [date, setDate] = useState(todayISO())
   const [all, setAll] = useState(false)
   const [updating, setUpdating] = useState('')
+  const [sharingTripId, setSharingTripId] = useState('')
+  const watchId = useRef(null)
+  const sharingTripIdRef = useRef('')
+  const lastLocationSentAt = useRef(0)
 
   const { data, error, loading, reload } = useLoad(
     () => api('/operator/schedules', { params: all ? { from: todayISO() } : { date } }),
     [date, all]
   )
   const trips = data?.schedules || []
+
+  function clearLocationWatch() {
+    if (watchId.current !== null) {
+      navigator.geolocation.clearWatch(watchId.current)
+      watchId.current = null
+    }
+    sharingTripIdRef.current = ''
+    setSharingTripId('')
+  }
+
+  async function stopLocationSharing(tripId = sharingTripIdRef.current) {
+    clearLocationWatch()
+    if (!tripId) return
+    try {
+      await api(`/operator/schedules/${tripId}/location`, { method: 'PATCH', body: { sharing: false } })
+    } catch (err) {
+      toast(err.message, 'error')
+    }
+  }
+
+  function startLocationSharing(trip) {
+    if (!navigator.geolocation) {
+      toast('This browser does not support GPS location sharing.', 'error')
+      return
+    }
+    sharingTripIdRef.current = trip._id
+    setSharingTripId(trip._id)
+    lastLocationSentAt.current = 0
+    watchId.current = navigator.geolocation.watchPosition(
+      (position) => {
+        if (sharingTripIdRef.current !== trip._id) return
+        const now = Date.now()
+        if (now - lastLocationSentAt.current < 10000) return
+        lastLocationSentAt.current = now
+        api(`/operator/schedules/${trip._id}/location`, {
+          method: 'PATCH',
+          body: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            accuracy: position.coords.accuracy,
+          },
+        }).catch((err) => {
+          toast(err.message, 'error')
+          void stopLocationSharing(trip._id)
+        })
+      },
+      (error) => {
+        if (sharingTripIdRef.current !== trip._id) return
+        toast(`Unable to get GPS location: ${error.message}`, 'error')
+        void stopLocationSharing(trip._id)
+      },
+      { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 }
+    )
+  }
+
+  useEffect(() => () => {
+    if (watchId.current !== null) navigator.geolocation?.clearWatch(watchId.current)
+    if (sharingTripIdRef.current) {
+      api(`/operator/schedules/${sharingTripIdRef.current}/location`, {
+        method: 'PATCH',
+        body: { sharing: false },
+      }).catch((error) => console.error('Unable to stop GPS sharing:', error))
+    }
+  }, [])
 
   async function setStatus(trip, tripStatus) {
     if (tripStatus === trip.tripStatus) return
@@ -27,6 +95,9 @@ export default function OperatorTrips() {
     try {
       await api(`/operator/schedules/${trip._id}/status`, { method: 'PATCH', body: { tripStatus } })
       toast(`Trip marked as ${tripStatus}`)
+      if (['Arrived', 'Cancelled'].includes(tripStatus) && sharingTripIdRef.current === trip._id) {
+        await stopLocationSharing(trip._id)
+      }
       reload()
     } catch (err) {
       toast(err.message, 'error')
@@ -68,6 +139,19 @@ export default function OperatorTrips() {
                 <span>Seats booked</span><span>{t.bookedSeats} / {t.totalSeats}</span>
               </div>
               <div className="occupancy"><i style={{ width: `${(t.bookedSeats / t.totalSeats) * 100}%` }} /></div>
+            </div>
+
+            <div>
+              <div className="sub" style={{ marginBottom: 6 }}>Live GPS tracking</div>
+              <button
+                className={`btn ${sharingTripId === t._id ? 'danger' : ''}`}
+                disabled={Boolean(sharingTripId && sharingTripId !== t._id) || ['Arrived', 'Cancelled'].includes(t.tripStatus)}
+                onClick={() => sharingTripId === t._id ? stopLocationSharing(t._id) : startLocationSharing(t)}
+              >
+                {sharingTripId === t._id ? 'Stop GPS sharing' : 'Share phone GPS'}
+              </button>
+              {sharingTripId === t._id && <span className="sub" style={{ marginLeft: 8 }}>Sharing while this page is open</span>}
+              <div className="sub">Requires location permission and HTTPS (or localhost).</div>
             </div>
 
             <div>

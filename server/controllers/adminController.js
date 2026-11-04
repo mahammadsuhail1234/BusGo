@@ -142,7 +142,7 @@ const listSchedules = wrap(async (req, res) => {
   if (routeId && mongoose.isValidObjectId(routeId)) filter.route = routeId;
   if (busId && mongoose.isValidObjectId(busId)) filter.fleetBus = busId;
 
-  const schedules = await Bus.find(filter).sort({ travelDate: 1, departureTime: 1 }).limit(500)
+  const schedules = await Bus.find(filter).select("+liveLocation").sort({ travelDate: 1, departureTime: 1 }).limit(500)
     .populate("fleetBus", "busName busNumber").populate("route", "source destination");
   res.json({ schedules });
 });
@@ -223,6 +223,25 @@ const updateSchedule = wrap(async (req, res) => {
   if (travelDate) trip.travelDate = travelDate;
   await trip.save();
   res.json({ schedule: trip });
+});
+
+const updateScheduleStatus = wrap(async (req, res) => {
+  const allowedStatuses = ["Scheduled", "Boarding", "Departed", "Delayed", "Arrived"];
+  const { tripStatus } = req.body;
+  if (!allowedStatuses.includes(tripStatus)) {
+    return res.status(400).json({ message: "Invalid trip status. Cancel trips using the cancel action." });
+  }
+
+  const trip = await Bus.findById(req.params.id);
+  if (!trip) return res.status(404).json({ message: "Schedule not found." });
+  if (trip.tripStatus === "Cancelled") {
+    return res.status(409).json({ message: "A cancelled trip cannot be reopened." });
+  }
+
+  trip.tripStatus = tripStatus;
+  trip.status = ["Departed", "Arrived"].includes(tripStatus) ? "completed" : "scheduled";
+  await trip.save();
+  res.json({ message: `Trip marked as ${tripStatus}.`, schedule: trip });
 });
 
 // Cancels all active bookings on a trip and flags the trip as cancelled
@@ -427,7 +446,7 @@ const reports = wrap(async (req, res) => {
 module.exports = {
   dashboard, listBuses, createBus, updateBus, deleteBus,
   listRoutes, createRoute, updateRoute, deleteRoute,
-  listSchedules, createSchedules, updateSchedule, cancelSchedule, deleteSchedule,
+  listSchedules, createSchedules, updateSchedule, updateScheduleStatus, cancelSchedule, deleteSchedule,
   listUsers, createStaff, updateUserRole,
   listBookings, cancelBooking, updateBookingStatus, reports,
 };

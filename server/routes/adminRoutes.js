@@ -20,6 +20,7 @@ router.delete("/routes/:id", c.deleteRoute);
 router.get("/schedules", c.listSchedules);
 router.post("/schedules", c.createSchedules);
 router.put("/schedules/:id", c.updateSchedule);
+router.patch("/schedules/:id/status", c.updateScheduleStatus);
 router.patch("/schedules/:id/cancel", c.cancelSchedule);
 router.delete("/schedules/:id", c.deleteSchedule);
 

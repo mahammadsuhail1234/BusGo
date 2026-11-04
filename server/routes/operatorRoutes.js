@@ -103,4 +103,31 @@ router.patch("/schedules/:id/status", async (req, res) => {
   res.json({ message: `Trip marked as ${tripStatus}.`, schedule: trip });
 });
 
+// PATCH /api/operator/schedules/:id/location
+router.patch("/schedules/:id/location", async (req, res) => {
+  const trip = await loadOwnTrip(req, res);
+  if (!trip) return;
+
+  if (req.body.sharing === false) {
+    await Bus.updateOne({ _id: trip._id }, { $set: { "liveLocation.sharing": false } });
+    return res.json({ message: "Location sharing stopped." });
+  }
+
+  const { latitude, longitude, accuracy } = req.body;
+  if (
+    typeof latitude !== "number" || !Number.isFinite(latitude) || latitude < -90 || latitude > 90 ||
+    typeof longitude !== "number" || !Number.isFinite(longitude) || longitude < -180 || longitude > 180 ||
+    (accuracy !== undefined && (typeof accuracy !== "number" || !Number.isFinite(accuracy) || accuracy < 0))
+  ) {
+    return res.status(400).json({ message: "A valid GPS location is required." });
+  }
+  if (["Arrived", "Cancelled"].includes(trip.tripStatus)) {
+    return res.status(409).json({ message: "Location sharing is unavailable for completed or cancelled trips." });
+  }
+
+  trip.liveLocation = { latitude, longitude, accuracy, updatedAt: new Date(), sharing: true };
+  await trip.save();
+  res.json({ message: "Bus location updated." });
+});
+
 module.exports = router;
