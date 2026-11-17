@@ -1,9 +1,11 @@
-const bookingRoutes = require("./routes/bookingRoutes");
-const express = require("express");
-const cors = require("cors");
-require("dotenv").config();
+import bookingRoutes from "./routes/bookingRoutes.js";
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
 
-const connectDB = require("./config/db");
+import connectDB from "./config/db.js";
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -11,11 +13,13 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/buses", require("./routes/busRoutes"));
+
+// Routes
+app.use("/api/auth", (await import("./routes/authRoutes.js")).default);
+app.use("/api/buses", (await import("./routes/busRoutes.js")).default);
 app.use("/api/bookings", bookingRoutes);
-app.use("/api/admin", require("./routes/adminRoutes"));
-app.use("/api/operator", require("./routes/operatorRoutes"));
+app.use("/api/admin", (await import("./routes/adminRoutes.js")).default);
+app.use("/api/operator", (await import("./routes/operatorRoutes.js")).default);
 
 // Home route
 app.get("/", (req, res) => {
@@ -30,13 +34,18 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// Start server after connecting to MongoDB
+// Start server
 const startServer = async () => {
-  await connectDB();
+  try {
+    await connectDB();
 
-  app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-  });
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Server startup failed:", error.message);
+    process.exit(1);
+  }
 };
 
 startServer();
