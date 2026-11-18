@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import "./PassengerDetails.css";
+import { API_BASE_URL } from "../api";
 
 function PassengerDetails() {
   const location = useLocation();
@@ -74,7 +75,7 @@ function PassengerDetails() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/bookings",
+        `${API_BASE_URL}/bookings`,
         {
           method: "POST",
           headers: {

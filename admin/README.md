@@ -42,4 +42,4 @@ and HTTPS (localhost is also supported); it runs while the trip page is open.
 Admins can see each trip's latest GPS location in **Schedules** and open it in a map. The
 schedule list refreshes automatically; locations older than one minute are marked stale.
 
-To point at a different API, copy `.env.example` to `.env` and edit `VITE_API_URL`.
+To point at a different API, copy `.env.example` to `.env` and edit `HOST`.

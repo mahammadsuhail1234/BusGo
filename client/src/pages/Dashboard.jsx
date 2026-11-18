@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../api";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ function Dashboard() {
 
     async function loadBookings() {
       try {
-        const response = await fetch("http://localhost:5000/api/bookings/mine", {
+        const response = await fetch(`${API_BASE_URL}/bookings/mine`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await response.json();
@@ -45,7 +46,7 @@ function Dashboard() {
     setBookingError("");
 
     try {
-      const response = await fetch(`http://localhost:5000/api/bookings/${booking._id}/cancel`, {
+      const response = await fetch(`${API_BASE_URL}/bookings/${booking._id}/cancel`, {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
       });

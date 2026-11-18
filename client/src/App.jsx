@@ -16,6 +16,7 @@ import Dashboard from "./pages/Dashboard";
 import SeatSelection from "./pages/SeatSelection";
 import PassengerDetails from "./pages/PassengerDetails";
 import BookingConfirmation from "./pages/BookingConfirmation";
+import { API_BASE_URL } from "./api";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ function HomePage() {
 
     async function loadLocations() {
       try {
-        const response = await fetch("http://localhost:5000/api/buses/locations");
+        const response = await fetch(`${API_BASE_URL}/buses/locations`);
         const data = await response.json();
         if (!response.ok) throw new Error(data.message || "Unable to load locations.");
         if (active) setLocations(data.locations || []);
@@ -92,7 +93,7 @@ function HomePage() {
       });
 
       const response = await fetch(
-        `http://localhost:5000/api/buses/search?${params.toString()}`
+        `${API_BASE_URL}/buses/search?${params.toString()}`
       );
 
       const data = await response.json();
