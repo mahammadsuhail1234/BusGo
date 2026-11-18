@@ -2,8 +2,8 @@
 
 ## API configuration
 
-Copy `.env.example` to `.env` and set `HOST` to the backend API base URL
-(for example, `http://localhost:5000/api`).
+Copy `.env.example` to `.env` and set `HOST` to the backend origin
+(for example, `http://localhost:5000`). The app appends `/api` automatically.
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 

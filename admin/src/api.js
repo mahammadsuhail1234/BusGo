@@ -1,4 +1,5 @@
-const BASE = import.meta.env.HOST || 'http://localhost:5000/api'
+const HOST = (import.meta.env.HOST || 'http://localhost:5000').replace(/\/+$/, '')
+const BASE = HOST.endsWith('/api') ? HOST : `${HOST}/api`
 const TOKEN_KEY = 'busgoStaffToken'
 const USER_KEY = 'busgoStaffUser'
 
